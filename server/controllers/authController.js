@@ -4,16 +4,19 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET  = process.env.JWT_SECRET || "fallback_secret"
 
 // Helper to set cookie
-const setSessionCookie = (res, payload)=>{
-    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "30d"})
-    res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        path: "/",
-    })
-}
+const setSessionCookie = (res, payload) => {
+  const token = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: "30d",
+  });
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    path: "/",
+  });
+};
 
 export async function register(req, res){
     const {name, email, password} = req.body
@@ -78,15 +81,16 @@ export async function login(req, res){
     })
 }
 
-export async function logout(_req, res){
-    res.cookie("token", "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 0,
-        path: "/",
-    })
-    res.json({success: true})
+export async function logout(_req, res) {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 0,
+    path: "/",
+  });
+
+  res.json({ success: true });
 }
 
 export async function me(req, res){
