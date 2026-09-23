@@ -1,0 +1,11 @@
+node_modules
+node_modules/
+dist
+build/
+npm-debug.log*
+.DS_Store
+.env
+.env.*
+*.pdf
+backend/.env
+frontend/.env
